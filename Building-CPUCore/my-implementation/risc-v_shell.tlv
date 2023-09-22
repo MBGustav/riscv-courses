@@ -42,11 +42,15 @@
 \TLV
    
    $reset = *reset;
+   
+   // PC DECLARATION...
    $pc[31:0] = >>1$next_pc;
    $next_pc[31:0] = $reset ? 0 : ($pc + 4'b100);
    
+   //INSTR. MEMORY DECLARATION
+   `READONLY_MEM($pc, $$instr[31:0])
 
-   // ...
+   
    
    
    // Assert these to end simulation (before Makerchip cycle limit).
