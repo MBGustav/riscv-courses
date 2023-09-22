@@ -56,9 +56,20 @@
    $is_j_instr = $instr[6:2] ==? 5'b11_011;
    $is_r_instr = $instr[6:2] ==? 5'b01_1x0 || $instr == 5'b01_011 ||$instr == 5'b10_100;
    $is_s_instr = $instr[6:2] ==? 5'b01_00x;
-   
    $is_u_instr = $instr[6:2] ==? 5'b0x_101;
    
+   //INSTR. TYPE VALIDATION
+   $rs1_valid = !$is_u_instr || $is_j_instr;
+   $rs2_valid = $is_r_instr || $is_s_instr || $is_b_instr;
+   $rd_valid  = $is_r_instr || $is_i_instr || $is_u_instr || $is_j_instr;
+   $imm_valid = $is_i_instr || $is_s_instr || $is_b_instr || $is_u_instr || $is_j_instr;
+   
+   
+   $opcode[6:0] = $instr[6:0];
+   $rd[4:0] = $instr[11:7];
+   $funct3[2:0] = $instr[14:12];
+   $rs1[4:0] = $instr[19:15];
+   $rs2[4:0] = $instr[24:20];
    
    
    
