@@ -53,7 +53,7 @@
    `READONLY_MEM($pc, $$instr[31:0])
 
    //INSTRUCTION TYPE DECLARATION
-   $is_b_instr = $instr[6:2] ==? 5'b11_000;//ok
+   $is_b_instr = $instr[6:2] ==? 5'b11_000;
    $is_i_instr = $instr[6:2] ==? 5'b00_00x || $instr[6:2] == 5'b11_001 || $instr[6:2] ==? 5'b00_1x0;
    $is_j_instr = $instr[6:2] ==? 5'b11_011;
    $is_r_instr = $instr[6:2] ==? 5'b01_1x0 || $instr == 5'b01_011 ||$instr == 5'b10_100;
@@ -84,14 +84,51 @@
    //INSTRUCTION SELECTOR DECLARATION 
    $dec_bits[10:0] = {$instr[30],$funct3,$opcode};
    
+     //BRANCH OPERATIONS
    $is_beq  = $dec_bits ==? 11'bx_000_1100011;
    $is_bne  = $dec_bits ==? 11'bx_001_1100011;
    $is_blt  = $dec_bits ==? 11'bx_100_1100011;
    $is_bge  = $dec_bits ==? 11'bx_101_1100011;
    $is_bltu = $dec_bits ==? 11'bx_110_1100011;
    $is_bgeu = $dec_bits ==? 11'bx_111_1100011;
+   
+     // ARITHMETIC OPERATIONS
    $is_addi = $dec_bits ==? 11'bx_000_0010011;
    $is_add  = $dec_bits ==? 11'b0_000_0110011;
+   $is_auipc = $dec_bits ==? 11'bx_xxx_0010111; // ADD UPPER IMM 
+   
+   $is_jal   = $dec_bits ==? 11'bx_xxx_1101111;
+   $is_jalr  = $dec_bits ==? 11'bx_xxx_1100111;
+   
+      //COMPARE OPER.
+   $is_slti  = $dec_bits ==? 11'bx_010_0010011;
+   $is_sltiu = $dec_bits ==? 11'bx_011_0010011;
+   $is_xori  = $dec_bits ==? 11'bx_100_0010011;
+   $is_ori   = $dec_bits ==? 11'bx_110_0010011;
+   $is_andi  = $dec_bits ==? 11'bx_111_0010011;
+   
+      //SHIFT OPER.
+   $is_slli  = $dec_bits ==? 11'b0_001_0010011;
+   $is_srli  = $dec_bits ==? 11'b0_101_0010011;
+   $is_srai  = $dec_bits ==? 11'b1_101_0010011;
+   $is_sub   = $dec_bits ==? 11'b1_000_0010011;
+   $is_sll   = $dec_bits ==? 11'b0_001_0010011;
+   
+      //COMPARE OPER.
+   $is_slt   = $dec_bits ==? 11'b0_010_0010011;
+   $is_sltu  = $dec_bits ==? 11'b0_011_0010011;
+   
+   $is_xor   = $dec_bits ==? 11'b0_100_0010011;
+      //SHIFT OPER.
+   $is_srl   = $dec_bits ==? 11'b0_101_0010011;
+   $is_sra   = $dec_bits ==? 11'b1_101_0010011;
+   
+   $is_or    = $dec_bits ==? 11'b0_110_0010011;
+   $is_and   = $dec_bits ==? 11'b0_111_0010011;
+   
+   //LOAD OPER.
+   $is_lui   = $dec_bits ==? 11'bx_xxx_0110111; // LOAD UPPER IMM
+   $is_load  = $dec_bits ==? 11'bx_xxx_0000011;
    
    //ALU IMPLEMENTATION
    $result[31:0] = $is_addi ? $src1_value + $imm:
